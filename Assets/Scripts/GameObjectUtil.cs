@@ -11,10 +11,20 @@ public class GameObjectUtil {
     {
         GameObject instance = null;
 
-        instance = GameObject.Instantiate(prefab);
-        instance.transform.position = pos;
+        var recycledScript = prefab.GetComponent<RecycleGameObject>();
+        if (recycledScript != null)
+        {
+            var pool = GetObjectPool(recycledScript);
+            instance = pool.NextObject(pos).gameObject;
+        }
+        else
+        {
 
-        return instance;
+            instance = GameObject.Instantiate(prefab);
+            instance.transform.position = pos;
+        }
+            return instance;
+        
     }
 
     public static void Destroy(GameObject gameObject)
@@ -30,16 +40,23 @@ public class GameObjectUtil {
         }
     }
 
-    private static Object GetObjectPool(RecycleGameObject reference)
+    private static ObjectPool GetObjectPool(RecycleGameObject reference)
     {
         ObjectPool pool = null;
-        if (pool.Containskey (reference))
+        if (pools.ContainsKey(reference))
         {
             pool = pools[reference];
-        } else
-        {
-            var poolContainer = 
         }
+        else
+        {
+            var poolContainer = new GameObject(reference.gameObject.name + "ObjectPool");
+            pool = poolContainer.AddComponent<ObjectPool>();
+            pool.prefab = reference;
+            pools.Add(reference, pool);
+        
+                
+              }
+        return pool;
     }
 
 }
