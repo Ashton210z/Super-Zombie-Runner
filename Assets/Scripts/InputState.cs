@@ -3,9 +3,11 @@ using System.Collections;
 
 public class InputState : MonoBehaviour {
 
+    [Header("Header 1")]
     public bool actionButton;
     public float absVelX = 0f;
     public float absVelY = 0f;
+    [Header("Header 2")]
     public bool standing;
     public float standingThreshold = 1;
 
