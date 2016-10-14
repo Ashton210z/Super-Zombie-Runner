@@ -10,6 +10,9 @@ public class InputState : MonoBehaviour {
     [Header("Header 2")]
     public bool standing;
     public float standingThreshold = 1;
+   
+    
+    
 
     private Rigidbody2D body2d;
 
