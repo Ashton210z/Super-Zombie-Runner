@@ -3,15 +3,19 @@ using System.Collections;
 
 public class InputState : MonoBehaviour {
 
-    [Header("Header 1")]
+    [Header("Inputs")]
     public bool actionButton;
+    public bool swipeUp = false;
+    public bool swipeDown = false;
+    [Header("Position")]
     public float absVelX = 0f;
     public float absVelY = 0f;
-    [Header("Header 2")]
+    [Header("Standing")]
     public bool standing;
     public float standingThreshold = 1;
-   
-    
+
+    private Vector2 firstPressPos;
+    private Vector2 currentSwipe;
     
 
     private Rigidbody2D body2d;
@@ -23,8 +27,24 @@ public class InputState : MonoBehaviour {
 
     void Update()
     {
-        actionButton = Input.anyKeyDown;
+        //Define action button
+        actionButton = Input.GetButtonUp("Fire1");
+
+        //MouseSwipes code
+        if (Input.GetMouseButtonDown(0))
+            {
+                firstPressPos = Input.mousePosition;
+            }
+        if (Input.GetMouseButtonUp(0))
+            {
+                currentSwipe = (Vector2)Input.mousePosition - firstPressPos;
+                Debug.Log(currentSwipe + ", " + currentSwipe.normalized);
+            }
+        swipeUp = (currentSwipe.y > firstPressPos.y) ;
+        swipeDown = (currentSwipe.y < firstPressPos.y);
+
     }
+   
 
     void FixedUpdate()
     {
